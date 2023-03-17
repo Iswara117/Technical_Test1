@@ -9,10 +9,13 @@ const addOrder =  async(req , res) =>{
         const driverNow = await Order.findOne({ where: 
             { driver: driver},
         });
-
+        
         const name_Approval = await User.findOne({ where: 
             { fullName: Approval},
         });
+        
+        console.log(name_Approval.id, "data id approval")
+        
         
         const today = new Date();
         
@@ -54,6 +57,7 @@ const addOrder =  async(req , res) =>{
             if(volume === beratAktual){
               let totalPrice = (volume/4000)*jumlahBarang
               nonCBM.push(totalPrice)
+              console.log(totalMuatan, "total muatan")
               await Order.create(
                 {
                     driver,
@@ -77,7 +81,8 @@ const addOrder =  async(req , res) =>{
                       userId: userId,
                       createdAt: today,
                       totalPrice: CBM,
-                      approval: name_Approval.id
+                      muatan: totalMuatan,
+                      createBy: name_Approval.id
                   }
               )
               }
@@ -109,17 +114,29 @@ const updateStatusOrder1 = async  (req, res) => {
       const dataOrder = await Order.findOne({ where: { id : orderId},});
     console.log(dataOrder)
     console.log(dataUser.id, "ini id user")
-    if(dataOrder.approval === dataUser.id){
+    if(dataOrder.userId === dataUser.id){
+        return res.status(400).json({  message: "sorry you can't access"})
+    }
         if(dataOrder.isUpdate === false){
-             await Order.update({
-             statusOrder1: status,
-             isUpdate: true,
-            statusOrder2: "Review"}, 
-            { where: { id : orderId, }, });
-            return res.status(400).json({  message: "the data has been approved"})
+            if(status === "Approve"){
+                await Order.update({
+                    statusOrder1: status,
+                    isUpdate: true,
+                   statusOrder2: "Review",}, 
+                   { where: { id : orderId, }, });
+                   return res.status(400).json({  message: "yeay my data is approve"})
+            }
+            else if(status === "Reject"){
+                await Order.update({
+                    statusOrder1: status,
+                    isUpdate: true,
+                   statusOrder2: "Review",}, 
+                   { where: { id : orderId, }, });
+                   return res.status(400).json({  message: "yahhh my data is rejected"})
+            }
             }else{
              return res.status(400).json({
-             message: "update only 1 time"})}}
+             message: "update only 1 time"})}
     }catch(error){
         return res.status(500).json({ message: error.message, })
     }
@@ -128,23 +145,34 @@ const updateStatusOrder1 = async  (req, res) => {
 const updateStatusOrder2 = async (req, res) => {
     try {
       const { status, } = req.body
-      const orderId = req.params.id
-    
+      const {id} = req.params
+      const dataOrder = await Order.findOne({ where: { id,},});
+
+      if(dataOrder.isUpdate2 == true){
+        return res.status(400).json({
+            message: "update only 1 time"})
+      }
+
+      if(dataOrder.statusOrder1 === "Reject"){
+        return res.status(400).json({
+            message: "sorry this data has reject"})
+      }
+
         if(status === "Approve"){
              await Order.update({
              statusOrder2: status,}, 
-            { where: { id : orderId, }, });
-            return res.status(400).json({  message: "the data has been approved"})
-            }else if(status === "Reject"){
-                await Order.update({
-                    statusOrder2: status,
-                    statusOrder1: "Reject"}, 
-                   { where: { id : orderId, }, });
-                   return res.status(400).json({  message: "the data has been approved"})
+            { where: { id, }, });
+            return res.status(400).json({  message: "yeay my data is approve"})
             }
-            else{
-             return res.status(400).json({
-             message: "update only 1 time"})}
+            
+        if(status === "Reject"){
+            await Order.update({
+            statusOrder2: status,
+            statusOrder1: "Reject"}, 
+            { where: { id, }, });
+            return res.status(400).json({  message: "yahhh my data is rejected"})
+            }
+             
 
     }catch(error){
         return res.status(500).json({ message: error.message, })
@@ -158,5 +186,6 @@ const updateStatusOrder2 = async (req, res) => {
 
 module.exports = {
     addOrder,
-    updateStatusOrder1
+    updateStatusOrder1,
+    updateStatusOrder2
 }
