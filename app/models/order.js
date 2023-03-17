@@ -16,8 +16,14 @@ module.exports = (sequelize, DataTypes) => {
   }
   Order.init({
     driver: DataTypes.STRING,
-    status: DataTypes.ENUM('Review','Approve','Reject'),
-    totalPrice: DataTypes.INTEGER
+    statusOrder1: DataTypes.ENUM('Review','Approve','Reject'),
+    statusOrder2: DataTypes.ENUM('Review','Approve','Reject'),
+    jenisKendaraan: DataTypes.ENUM('Angkutan Orang', 'Angkutan Barang'),
+    totalPrice: DataTypes.DECIMAL(19,4),
+    createBy: DataTypes.INTEGER,
+    isUpdate: DataTypes.BOOLEAN,
+    muatan: DataTypes.INTEGER,
+    userId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Order',

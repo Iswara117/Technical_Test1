@@ -17,14 +17,30 @@ module.exports = {
         defaultValue: Sequelize.fn('NOW')
       },
       totalPrice :{
-        type: Sequelize.INTEGER
+        type: Sequelize.DECIMAL(19, 4)
       },
       driver :{
         type: Sequelize.STRING
       },
-      statusOrder:{
+      statusOrder1:{
         type: Sequelize.ENUM("Review", "Approve", "Reject"),
         defaultValue: 'Review'
+      },
+      statusOrder2:{
+        type: Sequelize.ENUM("Review", "Approve", "Reject"),
+      },
+      jenisKendaraan:{
+        type: Sequelize.DataTypes.ENUM("Angkutan Orang", "Angkutan Barang"),
+      },
+      muatan:{
+        type: Sequelize.DataTypes.INTEGER,
+      },
+      createBy :{
+        type: Sequelize.INTEGER
+      },
+      isUpdate :{
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
       },
       userId: {
         type: Sequelize.INTEGER,
@@ -37,12 +53,10 @@ module.exports = {
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.fn('NOW')
       },
       updatedAt: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.fn('NOW')
       }
     });
   },
