@@ -23,9 +23,6 @@ const { User} = require('../models');
             id: user.id,
           },
           "rahasia",
-          {
-            expiresIn : "14m"
-          }
         )
 
         res.json({
