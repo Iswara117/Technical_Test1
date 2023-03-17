@@ -21,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     jenisKendaraan: DataTypes.ENUM('Angkutan Orang', 'Angkutan Barang'),
     totalPrice: DataTypes.DECIMAL(19,4),
     createBy: DataTypes.INTEGER,
+    isUpdate2: DataTypes.BOOLEAN,
     isUpdate: DataTypes.BOOLEAN,
     muatan: DataTypes.INTEGER,
     userId: DataTypes.INTEGER
