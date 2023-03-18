@@ -1,4 +1,5 @@
 
+const { Op } = require('sequelize')
 const { Order, User } = require('../models')
 
 const addOrder =  async(req , res) =>{
@@ -180,6 +181,40 @@ const updateStatusOrder2 = async (req, res) => {
 }
 
 
+const getData_Need_Approval = async (req, res) => {
+    try {
+    //   const { status, } = req.body
+    //   const {id} = req.params
+      const userId = req.user.id
+      const dataOrder = await Order.findAll({ where:{  userId,}});
+
+      console.log(dataOrder)
+      res.status(200).json({
+        status: "success",
+        dataOrder,
+      });
+    }catch(error){
+        return res.status(500).json({ message: error.message, })
+    }
+}
+
+const getData_Create_Order = async (req, res) => {
+    try {
+    //   const { status, } = req.body
+    //   const {id} = req.params
+      const userId = req.user.id
+      const dataOrder = await Order.findAll({ where:{  createBy: userId,}});
+
+      console.log(dataOrder)
+      res.status(200).json({
+        status: "success",
+        dataOrder,
+      });
+    }catch(error){
+        return res.status(500).json({ message: error.message, })
+    }
+}
+
 
 
 
@@ -187,5 +222,7 @@ const updateStatusOrder2 = async (req, res) => {
 module.exports = {
     addOrder,
     updateStatusOrder1,
-    updateStatusOrder2
+    updateStatusOrder2,
+    getData_Need_Approval,
+    getData_Create_Order
 }
