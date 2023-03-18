@@ -36,6 +36,11 @@
 > ```bash
 > npm install
 > ```
+> > -   Create Database
+>
+> ```bash
+> npm run db:create
+> ```
 > 
 > -   Migrate database
 >
